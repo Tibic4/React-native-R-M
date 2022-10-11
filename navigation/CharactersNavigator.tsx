@@ -38,6 +38,6 @@ const CharactersNavigator = () => {
       />
     </Stack.Navigator>
   );
-};
+}
 
 export default CharactersNavigator;

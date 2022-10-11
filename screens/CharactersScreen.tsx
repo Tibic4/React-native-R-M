@@ -6,11 +6,17 @@ import {
   Text,
   View,
 } from "react-native";
+
 import React, { useEffect, useState } from "react";
+
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
 import { CharactersStackParamList } from "../navigation";
+
 import { CharacterItem } from "../components";
+
 import { Character } from "../types";
+
 import { COLORS } from "../constants/COLORS";
 
 type CharactersScreenProps = NativeStackScreenProps<
@@ -27,27 +33,35 @@ const CharactersScreen = ({ navigation }: CharactersScreenProps) => {
       prev?: string | null;
     };
     results: Character[];
-  }>({
-    info: { count: 0, pages: 0, next: null, prev: null },
-    results: [],
-  });
+  }>({ info: { count: 0, pages: 0, next: null, prev: null }, results: [] });
+
   const [loading, setLoading] = useState<boolean>(true);
+
   const [page, setPage] = useState<string>("1");
+
   const fetchData = async () => {
     setLoading(true);
+
     let url;
+
     if (data.info.next) {
       url = data.info.next;
+
       setPage(data.info.next.split("page=")[1]);
     } else {
       url = "https://rickandmortyapi.com/api/character/";
+
       setPage("1");
     }
+
     const resp = await fetch(url);
+
     const jsonData = await resp.json();
+
     if (jsonData) {
       setData(jsonData);
     }
+
     setLoading(false);
   };
 
@@ -58,6 +72,7 @@ const CharactersScreen = ({ navigation }: CharactersScreenProps) => {
   const handleSelectedCharacter = (item: Character) => {
     navigation.navigate("CharacterDetail", {
       name: item.name,
+
       url: item.url,
     });
   };
@@ -69,14 +84,17 @@ const CharactersScreen = ({ navigation }: CharactersScreenProps) => {
   const renderItem: ListRenderItem<Character> = ({ item }) => (
     <CharacterItem item={item} onSelected={handleSelectedCharacter} />
   );
+
   return (
     <View style={styles.container}>
       <View style={styles.pagination}>
         <Text style={styles.text}>Total: {data.info.count}</Text>
+
         <Text style={styles.text}>
           Page {page} of {data.info.pages}
         </Text>
       </View>
+
       <FlatList
         data={data.results}
         keyExtractor={(item) => item.id.toString()}
@@ -100,15 +118,21 @@ export default CharactersScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     justifyContent: "center",
+
     alignItems: "center",
   },
+
   pagination: {
     flexDirection: "row",
   },
+
   text: {
     fontFamily: "WorkSans",
+
     color: COLORS.white,
+
     margin: 5,
   },
 });
